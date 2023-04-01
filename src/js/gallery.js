@@ -6,20 +6,20 @@ const inputEl = document.querySelector('.input');
 const galleryEl = document.querySelector('.gallery');
 const loadMoreEl = document.querySelector('.load-more');
 
-const pixabayAPI = new pixabayAPI();
+const pixabay = new pixabayAPI();
 let total = 0;
 const handleSubmit = async event => {
   event.preventDefault();
   total = 0;
-  total += pixabayAPI.perPage;
+  total += pixabay.perPage;
   console.log(total);
   if (inputEl.value === '') {
     return;
   }
-  pixabayAPI.page = 1;
-  pixabayAPI.photo = inputEl.value.trim();
+  pixabay.page = 1;
+  pixabay.photo = inputEl.value.trim();
   try {
-    const { data } = await pixabayAPI.fetchPhoto();
+    const { data } = await pixabay.fetchPhoto();
     console.log(data);
     const arrayPhoto = data.hits;
     galleryEl.innerHTML = makePhoto(arrayPhoto);
@@ -28,7 +28,7 @@ const handleSubmit = async event => {
       return Notiflix.Notify.warning(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-    } else if (data.totalHits < pixabayAPI.perPage || data.totalHits === 0) {
+    } else if (data.totalHits < pixabay.perPage || data.totalHits === 0) {
       loadMoreEl.classList.add('is-hidden');
       galleryEl.insertAdjacentHTML(
         'beforeend',
@@ -66,10 +66,10 @@ function makePhoto(arrayPhoto) {
   return photo;
 }
 const handleloadMore = async () => {
-  pixabayAPI.page += 1;
+  pixabay.page += 1;
   try {
-    const { data } = await pixabayAPI.fetchPhoto();
-    total += pixabayAPI.perPage;
+    const { data } = await pixabay.fetchPhoto();
+    total += pixabay.perPage;
     console.log(total);
     const arrayPhoto = data.hits;
     galleryEl.insertAdjacentHTML('beforeend', makePhoto(arrayPhoto));
