@@ -8,6 +8,7 @@ const loadMoreEl = document.querySelector('.load-more');
 
 const pixabayApi = new pixabayAPI();
 let total = 0;
+
 const handleSubmit = async event => {
   event.preventDefault();
   total = 0;
@@ -21,8 +22,10 @@ const handleSubmit = async event => {
   try {
     const { data } = await pixabayApi.fetchPhoto();
     console.log(data);
+
     const arrayPhoto = data.hits;
     galleryEl.innerHTML = makePhoto(arrayPhoto);
+
     if (data.totalHits === 0) {
       loadMoreEl.classList.add('is-hidden');
       return Notiflix.Notify.warning(
@@ -41,6 +44,7 @@ const handleSubmit = async event => {
     console.log(error);
   }
 };
+
 function makePhoto(arrayPhoto) {
   const photo = arrayPhoto
     .map(({ webformatURL, tags, likes, views, comments, downloads }) => {
@@ -65,14 +69,17 @@ function makePhoto(arrayPhoto) {
     .join('');
   return photo;
 }
+
 const handleloadMore = async () => {
   pixabayApi.page += 1;
   try {
     const { data } = await pixabayApi.fetchPhoto();
     total += pixabayApi.perPage;
     console.log(total);
+
     const arrayPhoto = data.hits;
     galleryEl.insertAdjacentHTML('beforeend', makePhoto(arrayPhoto));
+
     if (data.totalHits < total) {
       loadMoreEl.classList.add('is-hidden');
       galleryEl.insertAdjacentHTML(
@@ -84,5 +91,6 @@ const handleloadMore = async () => {
     console.log(error);
   }
 };
+
 formEl.addEventListener('submit', handleSubmit);
 loadMoreEl.addEventListener('click', handleloadMore);
