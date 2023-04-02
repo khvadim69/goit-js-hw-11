@@ -7,8 +7,8 @@ export class pixabayAPI {
   page = 1;
   perPage = 40;
   async fetchPhoto() { try {
-        return await axios.get(
-          `${BASE_URL}/?key=${API_KEY}&q=${this.photo}&per_page=${
+        return await axios.get(`
+          ${BASE_URL}/?key=${API_KEY}&q=${this.photo}&per_page=${
             this.perPage
           }&page=${
             this.page
